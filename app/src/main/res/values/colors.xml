@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="mtrBlue">#02254D</color>
+    <color name="bgrdWhite">#FFFFFF</color>
+    <color name="bgrdBlue">#C5D9E4</color>
+    <color name="wrl">#A71681</color>
+    <color name="tcl">#F49432</color>
+    <color name="tkl">#823F91</color>
+    <color name="ael">#008489</color>
+</resources>

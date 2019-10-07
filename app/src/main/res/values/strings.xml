@@ -1,0 +1,120 @@
+<resources>
+    <string name="app_name">Next Train Analyzer</string>
+
+    <string-array name="lines_long">
+        <item>西鐵綫 West Rail Line</item>
+        <item>東涌綫 Tung Chung Line</item>
+        <item>將軍澳綫 Tseung Kwan O Line</item>
+        <item>機場快綫 Airport Express Line</item>
+    </string-array>
+
+    <string-array name="terminus">
+        <item>HUH</item>
+        <item>TUM</item>
+        <item>HOK</item>
+        <item>TUC</item>
+        <item>NOP</item>
+        <item>POA</item>
+        <item>LHP</item>
+        <item>HOK</item>
+        <item>AWE</item>
+    </string-array>
+
+    <string-array name="lines">
+        <item>WRL</item>
+        <item>TCL</item>
+        <item>TKL</item>
+        <item>AEL</item>
+    </string-array>
+
+    <string-array name="wrl_stations">
+        <item>HUH</item>
+        <item>ETS</item>
+        <item>AUS</item>
+        <item>NAC</item>
+        <item>MEF</item>
+        <item>TWW</item>
+        <item>KSR</item>
+        <item>YUL</item>
+        <item>LOP</item>
+        <item>TIS</item>
+        <item>SIH</item>
+        <item>TUM</item>
+    </string-array>
+
+    <string-array name="wrl_stations_long">
+        <item>紅磡</item>
+        <item>尖東</item>
+        <item>柯士甸</item>
+        <item>南昌</item>
+        <item>美孚</item>
+        <item>荃灣西</item>
+        <item>錦上路</item>
+        <item>元朗</item>
+        <item>朗屏</item>
+        <item>天水圍</item>
+        <item>兆康</item>
+        <item>屯門</item>
+    </string-array>
+
+    <string-array name="tcl_stations">
+        <item>HOK</item>
+        <item>KOW</item>
+        <item>OLY</item>
+        <item>NAC</item>
+        <item>LAK</item>
+        <item>TSY</item>
+        <item>SUN</item>
+        <item>TUC</item>
+    </string-array>
+
+    <string-array name="tcl_stations_long">
+        <item>香港</item>
+        <item>九龍</item>
+        <item>奧運</item>
+        <item>南昌</item>
+        <item>茘景</item>
+        <item>青衣</item>
+        <item>欣澳</item>
+        <item>東涌</item>
+    </string-array>
+
+    <string-array name="tkl_stations">
+        <item>NOP</item>
+        <item>QUB</item>
+        <item>YAT</item>
+        <item>TIK</item>
+        <item>TKO</item>
+        <item>HAH</item>
+        <item>POA</item>
+        <item>LHP</item>
+    </string-array>
+
+    <string-array name="tkl_stations_long">
+        <item>北角</item>
+        <item>鰂魚涌</item>
+        <item>油塘</item>
+        <item>調景嶺</item>
+        <item>將軍澳</item>
+        <item>坑口</item>
+        <item>寶琳</item>
+        <item>康城</item>
+    </string-array>
+
+    <string-array name="ael_stations">
+        <item>HOK</item>
+        <item>KOW</item>
+        <item>TSY</item>
+        <item>AIR</item>
+        <item>AWE</item>
+    </string-array>
+
+    <string-array name="ael_stations_long">
+        <item>香港</item>
+        <item>九龍</item>
+        <item>青衣</item>
+        <item>機場</item>
+        <item>博覽館</item>
+    </string-array>
+
+</resources>
