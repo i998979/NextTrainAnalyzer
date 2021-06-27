@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         bgrd_search = findViewById(R.id.bgrd_search);
 
         line = findViewById(R.id.line);
-        line_selected = "WRL";
+        line_selected = "TML";
 
         last_update = findViewById(R.id.last_update);
         refresh = findViewById(R.id.refresh);
@@ -86,10 +86,10 @@ public class MainActivity extends AppCompatActivity {
 
         dest_layout = findViewById(R.id.dest_layout);
         selected_dest = findViewById(R.id.selected_dest);
-        selected_dest.setSelection(3);
+        selected_dest.setSelection(18);
         dest_selected = "NAC";
         selected_station = findViewById(R.id.selected_station);
-        selected_station.setSelection(10);
+        selected_station.setSelection(25);
         station_selected = "SIH";
         station_mode_layout = findViewById(R.id.station_mode_layout);
 

@@ -15,7 +15,7 @@
             android:id="@+id/tvStation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/wrl"
+            android:background="@color/tml"
             android:gravity="center"
             android:paddingLeft="5dp"
             android:paddingTop="2dp"
@@ -65,7 +65,7 @@
                 android:id="@+id/platImg"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                app:srcCompat="@drawable/wrl_p1" />
+                app:srcCompat="@drawable/tml_p1" />
 
             <TextView
                 android:id="@+id/tvTtnt"

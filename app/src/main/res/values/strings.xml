@@ -2,14 +2,14 @@
     <string name="app_name">Next Train Analyzer</string>
 
     <string-array name="lines_long">
-        <item>西鐵綫 West Rail Line</item>
+        <item>屯馬綫 Turn Ma Line</item>
         <item>東涌綫 Tung Chung Line</item>
         <item>將軍澳綫 Tseung Kwan O Line</item>
         <item>機場快綫 Airport Express Line</item>
     </string-array>
 
     <string-array name="terminus">
-        <item>HUH</item>
+        <item>WKS</item>
         <item>TUM</item>
         <item>HOK</item>
         <item>TUC</item>
@@ -21,13 +21,28 @@
     </string-array>
 
     <string-array name="lines">
-        <item>WRL</item>
+        <item>TML</item>
         <item>TCL</item>
         <item>TKL</item>
         <item>AEL</item>
     </string-array>
 
-    <string-array name="wrl_stations">
+    <string-array name="tml_stations">
+        <item>WKS</item>
+        <item>MOS</item>
+        <item>HEO</item>
+        <item>TSH</item>
+        <item>SHM</item>
+        <item>CIO</item>
+        <item>STW</item>
+        <item>CKT</item>
+        <item>TAW</item>
+        <item>HIK</item>
+        <item>DIH</item>
+        <item>KAT</item>
+        <item>SUW</item>
+        <item>TKW</item>
+        <item>HOM</item>
         <item>HUH</item>
         <item>ETS</item>
         <item>AUS</item>
@@ -42,7 +57,22 @@
         <item>TUM</item>
     </string-array>
 
-    <string-array name="wrl_stations_long">
+    <string-array name="tml_stations_long">
+        <item>烏溪沙</item>
+        <item>馬鞍山</item>
+        <item>恆安</item>
+        <item>大水坑</item>
+        <item>石門</item>
+        <item>第一城</item>
+        <item>沙田圍</item>
+        <item>車公廟</item>
+        <item>大圍</item>
+        <item>顯徑</item>
+        <item>鑽石山</item>
+        <item>啟德</item>
+        <item>宋皇臺</item>
+        <item>土瓜灣</item>
+        <item>何文田</item>
         <item>紅磡</item>
         <item>尖東</item>
         <item>柯士甸</item>

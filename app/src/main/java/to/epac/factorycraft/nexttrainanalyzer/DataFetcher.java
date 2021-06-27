@@ -48,8 +48,6 @@ public class DataFetcher extends AsyncTask {
 
     private Context context;
 
-    private final String secretKey = "c90vfabc";
-
     private String sys_time = "無";
 
     private String data_in_raw = "";
@@ -78,20 +76,12 @@ public class DataFetcher extends AsyncTask {
             String received_data = "";
             try {
 
-                String keyToHash = line_selected + "|";
-                if (check_mode.getCheckedRadioButtonId() == R.id.station_mode) keyToHash += station_selected;
-                if (check_mode.getCheckedRadioButtonId() == R.id.line_mode) keyToHash += stations[i];
-
-                keyToHash += "|" + "en" + "|" + ISOdate + "|" + secretKey;
-
-                String hashedKey = Utils.sha1Hash(keyToHash);
-
                 if (check_mode.getCheckedRadioButtonId() == R.id.station_mode)
-                    url = new URL("https://mavmapp1044.azurewebsites.net/reverse_proxy/NT_v2/NTAppModule/getSchedule.php?key=" +
-                            hashedKey + "&line=" + line_selected + "&sta=" + station_selected + "&lang=en");
+                    url = new URL("https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?" +
+                            "line=" + line_selected + "&sta=" + station_selected + "&lang=en");
                 else
-                    url = new URL("https://mavmapp1044.azurewebsites.net/reverse_proxy/NT_v2/NTAppModule/getSchedule.php?key=" +
-                            hashedKey + "&line=" + line_selected + "&sta=" + stations[i] + "&lang=en");
+                    url = new URL("https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?" +
+                            "line=" + line_selected + "&sta=" + stations[i] + "&lang=en");
 
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 InputStream inputStream = httpURLConnection.getInputStream();
