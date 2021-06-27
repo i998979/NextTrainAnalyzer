@@ -2,7 +2,7 @@
     <string name="app_name">Next Train Analyzer</string>
 
     <string-array name="lines_long">
-        <item>屯馬綫 Turn Ma Line</item>
+        <item>屯馬綫 Tuen Ma Line</item>
         <item>東涌綫 Tung Chung Line</item>
         <item>將軍澳綫 Tseung Kwan O Line</item>
         <item>機場快綫 Airport Express Line</item>
