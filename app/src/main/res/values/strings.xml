@@ -2,14 +2,20 @@
     <string name="app_name">Next Train Analyzer</string>
 
     <string-array name="lines_long">
+        <item>東鐵綫 East Rail Line</item>
         <item>屯馬綫 Tuen Ma Line</item>
+        <!--<item>屯馬綫 Tuen Ma Line (西鐵綫 West Rail Line)</item>
+        <item>屯馬綫 Tuen Ma Line (馬鞍山綫 Ma On Shan Line)</item>
+        <item>屯馬綫 Tuen Ma Line (新段 New Section)</item>-->
         <item>東涌綫 Tung Chung Line</item>
         <item>將軍澳綫 Tseung Kwan O Line</item>
         <item>機場快綫 Airport Express Line</item>
     </string-array>
 
     <string-array name="terminus">
-        <item>WKS</item>
+        <item>ADM</item>
+        <item>LOW</item>
+        <item>LMC</item>
         <item>TUM</item>
         <item>HOK</item>
         <item>TUC</item>
@@ -21,10 +27,49 @@
     </string-array>
 
     <string-array name="lines">
-        <item>TML</item>
+        <item>EAL</item>
+        <item>WRL</item>
         <item>TCL</item>
         <item>TKL</item>
         <item>AEL</item>
+    </string-array>
+
+    <string-array name="eal_stations">
+        <item>ADM</item>
+        <item>EXC</item>
+        <item>HUH</item>
+        <item>MKK</item>
+        <item>KOT</item>
+        <item>TAW</item>
+        <item>SHT</item>
+        <item>FOT</item>
+        <item>RAC</item>
+        <item>UNI</item>
+        <item>TAP</item>
+        <item>TWO</item>
+        <item>FAN</item>
+        <item>SHS</item>
+        <item>LOW</item>
+        <item>LMC</item>
+    </string-array>
+
+    <string-array name="eal_stations_long">
+        <item>金鐘</item>
+        <item>會展</item>
+        <item>紅磡</item>
+        <item>旺角東</item>
+        <item>九龍塘</item>
+        <item>大圍</item>
+        <item>沙田</item>
+        <item>火炭</item>
+        <item>馬場</item>
+        <item>大學</item>
+        <item>大埔墟</item>
+        <item>太和</item>
+        <item>粉嶺</item>
+        <item>上水</item>
+        <item>羅湖</item>
+        <item>落馬洲</item>
     </string-array>
 
     <string-array name="tml_stations">

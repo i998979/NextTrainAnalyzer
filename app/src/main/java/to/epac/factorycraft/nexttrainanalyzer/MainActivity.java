@@ -126,11 +126,10 @@ public class MainActivity extends AppCompatActivity {
                     //manager.cancel(NotificationProvider.IS_RUNNING_ID);
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    if (isServiceRunning(ScanService.class))
-                        bgrd_search.setImageDrawable(getDrawable(R.drawable.ic_pause_circle_outline_black_24dp));
-                    else
-                        bgrd_search.setImageDrawable(getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
+                if (isServiceRunning(ScanService.class))
+                    bgrd_search.setImageDrawable(getDrawable(R.drawable.ic_pause_circle_outline_black_24dp));
+                else
+                    bgrd_search.setImageDrawable(getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
             }
         });
 
@@ -231,11 +230,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            if (isServiceRunning(ScanService.class))
-                bgrd_search.setImageDrawable(getDrawable(R.drawable.ic_pause_circle_outline_black_24dp));
-            else
-                bgrd_search.setImageDrawable(getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
+        if (isServiceRunning(ScanService.class))
+            bgrd_search.setImageDrawable(getDrawable(R.drawable.ic_pause_circle_outline_black_24dp));
+        else
+            bgrd_search.setImageDrawable(getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
 
         result.setText("載入中...");
         // TODO - try ASyncTask to do periodically

@@ -2,6 +2,23 @@ package to.epac.factorycraft.nexttrainanalyzer;
 
 public class Utils {
     public static String getStationName(String name) {
+        if (name.equals("ADM")) return "金鐘";
+        if (name.equals("EXC")) return "會展";
+        if (name.equals("HUH")) return "紅磡";
+        if (name.equals("MKK")) return "旺角東";
+        if (name.equals("KOT")) return "九龍塘";
+        if (name.equals("TAW")) return "大圍";
+        if (name.equals("SHT")) return "沙田";
+        if (name.equals("FOT")) return "火炭";
+        if (name.equals("RAC")) return "馬場";
+        if (name.equals("UNI")) return "大學";
+        if (name.equals("TAP")) return "大埔墟";
+        if (name.equals("TWO")) return "太和";
+        if (name.equals("FAN")) return "粉嶺";
+        if (name.equals("SHS")) return "上水";
+        if (name.equals("LOW")) return "羅湖";
+        if (name.equals("LMC")) return "落馬洲";
+
         if (name.equals("WKS")) return "烏溪沙";
         if (name.equals("MOS")) return "馬鞍山";
         if (name.equals("HEO")) return "恆安";
