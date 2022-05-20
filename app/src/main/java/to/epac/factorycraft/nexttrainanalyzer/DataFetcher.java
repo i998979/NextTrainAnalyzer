@@ -70,7 +70,7 @@ public class DataFetcher extends AsyncTask {
         do {
             String receivedData = "";
             try {
-                if (!pref.getBoolean("line_mode", false))
+                if (!pref.getBoolean("line_mode", true))
                     url = new URL("https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?" +
                             "line=" + lineSelected + "&sta=" + pref.getString("selected_station", "ADM") + "&lang=en");
                 else
@@ -162,7 +162,7 @@ public class DataFetcher extends AsyncTask {
             i++;
 
             if (!pref.getBoolean("line_mode", true)) break;
-            if (pref.getBoolean("line_mode", false) && i >= stations.length) break;
+            if (pref.getBoolean("line_mode", true) && i >= stations.length) break;
 
         } while (i < stations.length);
 
