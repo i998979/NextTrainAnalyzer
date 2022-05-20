@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/brian/AndroidStudioProjects/NextTrainAnalyzer/app/src/main/res/layout/activity_main.xml" value="0.27807971014492755" />
+        <entry key="..\:/Users/brian/AndroidStudioProjects/NextTrainAnalyzer/app/src/main/res/layout/activity_main2.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/brian/AndroidStudioProjects/NextTrainAnalyzer/app/src/main/res/layout/train_cards.xml" value="0.29981884057971014" />
         <entry key="..\:/Users/brian/StudioProjects/NextTrainAnalyzer/app/src/main/res/layout/activity_main.xml" value="0.3651041666666667" />
+        <entry key="..\:/Users/brian/StudioProjects/NextTrainAnalyzer/app/src/main/res/layout/activity_main2.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/brian/StudioProjects/NextTrainAnalyzer/app/src/main/res/layout/train_cards.xml" value="0.3651041666666667" />
       </map>
     </option>

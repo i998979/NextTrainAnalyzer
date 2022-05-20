@@ -1,5 +1,16 @@
 package to.epac.factorycraft.nexttrainanalyzer;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.dnAdapter;
+import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.lastUpdate;
+import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.lineSelected;
+import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.noData;
+import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.pref;
+import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.rawData;
+import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.result;
+import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.showRawData;
+import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.upAdapter;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -17,108 +28,94 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.check_mode;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.dest_selected;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.dn_adapter;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.dn_train_datas;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.last_update;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.line_selected;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.no_data;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.raw_data;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.result;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.show_raw_data;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.station_selected;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.up_adapter;
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.up_train_datas;
-
 public class DataFetcher extends AsyncTask {
     private final int TRAIN_FOUND_ID = 2;
 
-    private Context context;
+    private WeakReference<Context> context;
 
     private String sys_time = "無";
 
     private String data_in_raw = "";
 
-    private ArrayList<Train> t_up_train_datas = new ArrayList<>();
-    private ArrayList<Train> t_dn_train_datas = new ArrayList<>();
+    private ArrayList<Train> upTrainData0 = new ArrayList<>();
+    private ArrayList<Train> dnTrainData0 = new ArrayList<>();
 
     public DataFetcher(Context context) {
-        this.context = context;
+        this.context = new WeakReference<>(context);
     }
 
     @Override
     protected Object doInBackground(Object[] objects) {
-        int resId = context.getResources().getIdentifier(line_selected.toLowerCase() + "_stations", "array", context.getPackageName());
-        String[] stations = context.getResources().getStringArray(resId);
+        int resId = context.get().getResources().getIdentifier(lineSelected.toLowerCase() + "_stations", "array", context.get().getPackageName());
+        String[] stations = context.get().getResources().getStringArray(resId);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String ISOdate = df.format(new Date());
 
-        t_up_train_datas.clear();
-        t_dn_train_datas.clear();
+        upTrainData0.clear();
+        dnTrainData0.clear();
 
         URL url;
         int i = 0;
         do {
-            String received_data = "";
+            String receivedData = "";
             try {
-
-                if (check_mode.getCheckedRadioButtonId() == R.id.station_mode)
+                if (!pref.getBoolean("line_mode", false))
                     url = new URL("https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?" +
-                            "line=" + line_selected + "&sta=" + station_selected + "&lang=en");
+                            "line=" + lineSelected + "&sta=" + pref.getString("selected_station", "ADM") + "&lang=en");
                 else
                     url = new URL("https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?" +
-                            "line=" + line_selected + "&sta=" + stations[i] + "&lang=en");
+                            "line=" + lineSelected + "&sta=" + stations[i] + "&lang=en");
 
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                InputStream is = conn.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-                String line = "";
-                while (line != null) {
-                    line = bufferedReader.readLine();
-                    if (line == null) break;
-                    received_data = received_data + line;
+                String line;
+                while ((line = br.readLine()) != null) {
+                    receivedData += line;
                 }
 
-                JSONObject jsonObject = new JSONObject(received_data);
+                JSONObject jsonObject = new JSONObject(receivedData);
                 String status = jsonObject.getString("status");
                 String message = jsonObject.getString("message");
+                String url0 = "";
+                try {
+                    url0 = jsonObject.getString("url");
+                } catch (Exception e) {
+                }
                 String curr_time = jsonObject.getString("curr_time");
                 String sys_time = jsonObject.getString("sys_time");
                 String isdelay = jsonObject.getString("isdelay");
+
                 JSONObject jsonObject2 = jsonObject.getJSONObject("data");
 
                 this.sys_time = sys_time;
 
                 JSONObject jsonObject3;
-                if (check_mode.getCheckedRadioButtonId() == R.id.station_mode)
-                    jsonObject3 = jsonObject2.getJSONObject(line_selected + "-" + station_selected);
+                if (!pref.getBoolean("line_mode", true))
+                    jsonObject3 = jsonObject2.getJSONObject(lineSelected + "-" + pref.getString("selected_station", "ADM"));
                 else
-                    jsonObject3 = jsonObject2.getJSONObject(line_selected + "-" + stations[i]);
+                    jsonObject3 = jsonObject2.getJSONObject(lineSelected + "-" + stations[i]);
 
                 String curr_time2 = jsonObject3.getString("curr_time");
                 String sys_time2 = jsonObject3.getString("sys_time");
 
                 JSONArray DIR = null;
                 for (int k = 0; k < 2; k++) {
-
                     try {
                         // HUH has no UP trains
-                        // TUM has no DN trains, this will result a JSONException and will be catched in catch block
+                        // TUM has no DN trains, this will result a JSONException and will be caught in catch block
                         if (k == 0) DIR = jsonObject3.getJSONArray("UP");
                         if (k == 1) DIR = jsonObject3.getJSONArray("DOWN");
 
@@ -131,42 +128,41 @@ public class DataFetcher extends AsyncTask {
                             String source = jsonObject4.getString("source");
                             String dest = jsonObject4.getString("dest");
                             String seq = jsonObject4.getString("seq");
+                            String timetype = "";
+                            try {
+                                timetype = jsonObject4.getString("timetype");
+                            } catch (Exception e) {
+                            }
+                            String route = "";
+                            try {
+                                route = jsonObject4.getString("route");
+                            } catch (Exception e) {
+                            }
 
                             Train train;
-                            if (k == 0) {
-                                if (check_mode.getCheckedRadioButtonId() == R.id.station_mode)
-                                    train = new Train("UP", station_selected, seq, time, dest, plat, ttnt);
-                                else
-                                    train = new Train("UP", stations[i], seq, time, dest, plat, ttnt);
+                            if (!pref.getBoolean("line_mode", true))
+                                train = new Train(k == 0 ? "UP" : "DN", pref.getString("selected_station", "ADM"), seq, time, dest, plat, ttnt, timetype, route);
+                            else
+                                train = new Train(k == 0 ? "UP" : "DN", stations[i], seq, time, dest, plat, ttnt, timetype, route);
 
-                                t_up_train_datas.add(train);
-                            }
-                            else {
-                                if (check_mode.getCheckedRadioButtonId() == R.id.station_mode)
-                                    train = new Train("DN", station_selected, seq, time, dest, plat, ttnt);
-                                else {
-                                    train = new Train("DN", stations[i], seq, time, dest, plat, ttnt);
-                                }
-                                t_dn_train_datas.add(train);
-                            }
+                            if (k == 0)
+                                upTrainData0.add(train);
+                            else
+                                dnTrainData0.add(train);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            data_in_raw = data_in_raw + received_data + "\n\n";
+            data_in_raw = data_in_raw + receivedData + "\n\n";
             i++;
 
-            if (check_mode.getCheckedRadioButtonId() == R.id.station_mode) break;
-            if (check_mode.getCheckedRadioButtonId() == R.id.line_mode && i >= stations.length) break;
+            if (!pref.getBoolean("line_mode", true)) break;
+            if (pref.getBoolean("line_mode", false) && i >= stations.length) break;
 
         } while (i < stations.length);
 
@@ -179,33 +175,35 @@ public class DataFetcher extends AsyncTask {
 
         // TODO - sort by station name here
 
-        up_train_datas.clear();
-        dn_train_datas.clear();
-        up_train_datas.addAll(t_up_train_datas);
-        dn_train_datas.addAll(t_dn_train_datas);
+        MainActivity.upTrainData.clear();
+        MainActivity.dnTrainData.clear();
+        MainActivity.upTrainData.addAll(upTrainData0);
+        MainActivity.dnTrainData.addAll(dnTrainData0);
 
-        up_adapter.notifyDataSetChanged();
-        dn_adapter.notifyDataSetChanged();
+        upAdapter.notifyDataSetChanged();
+        dnAdapter.notifyDataSetChanged();
 
-        if (up_train_datas.isEmpty() && dn_train_datas.isEmpty() && !show_raw_data.isChecked()) no_data.setVisibility(View.VISIBLE);
-        else no_data.setVisibility(View.GONE);
+        if (MainActivity.upTrainData.isEmpty() && MainActivity.dnTrainData.isEmpty() && !showRawData.isChecked())
+            noData.setVisibility(View.VISIBLE);
+        else
+            noData.setVisibility(View.GONE);
 
-        last_update.setText("最後更新：" + sys_time);
+        lastUpdate.setText("最後更新：" + sys_time);
 
-        raw_data.setText(data_in_raw);
+        rawData.setText(data_in_raw);
 
         String msg = "";
-        for(Train train : up_train_datas) {
-            if (train.getDest().equals(dest_selected))
+        for (Train train : MainActivity.upTrainData) {
+            if (train.getDest().equals(pref.getString("selected_dest", "ADM")))
                 msg += "車站：" + Utils.getStationName(train.getStation()) + " 月台：" + train.getPlat() + " 時間：" + train.getTime() + "\n";
         }
-        for(Train train : dn_train_datas) {
-            if (train.getDest().equals(dest_selected))
+        for (Train train : MainActivity.dnTrainData) {
+            if (train.getDest().equals(pref.getString("selected_dest", "ADM")))
                 msg += "車站：" + Utils.getStationName(train.getStation()) + " 月台：" + train.getPlat() + " 時間：" + train.getTime() + "\n";
         }
 
         if (!msg.isEmpty()) {
-            result.setText("已找到往 " + Utils.getStationName(dest_selected) + " 列車");
+            result.setText("已找到往 " + Utils.getStationName(pref.getString("selected_dest", "ADM")) + " 列車");
 
             NotificationChannel channel = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -213,11 +211,11 @@ public class DataFetcher extends AsyncTask {
                         "Next Train Analyzer", NotificationManager.IMPORTANCE_HIGH);
             }
 
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) context.get().getSystemService(NOTIFICATION_SERVICE);
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(TRAIN_FOUND_ID))
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context.get(), String.valueOf(TRAIN_FOUND_ID))
                     .setSmallIcon(R.drawable.sp1900_wr_nobgrd)
-                    .setContentTitle("已找到往 " + Utils.getStationName(dest_selected) + " 列車")
+                    .setContentTitle("已找到往 " + Utils.getStationName(pref.getString("selected_dest", "ADM")) + " 列車")
                     .setContentText(msg)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                     //.setContentTitle("Next Train Analyzer")
@@ -226,17 +224,18 @@ public class DataFetcher extends AsyncTask {
                     .setPriority(Notification.PRIORITY_MAX)
                     .setAutoCancel(true);
 
-            Intent mIntent = new Intent(context, MainActivity.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Intent mIntent = new Intent(context.get(), MainActivity.class);
+            PendingIntent contentIntent;
+            contentIntent = PendingIntent.getActivity(context.get(),
+                    0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             builder.setContentIntent(contentIntent);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 notificationManager.createNotificationChannel(channel);
-            }
+
             Notification notification = builder.build();
             notificationManager.notify(TRAIN_FOUND_ID, notification);
-        }
-        else
+        } else
             result.setText("沒有資料");
     }
 }

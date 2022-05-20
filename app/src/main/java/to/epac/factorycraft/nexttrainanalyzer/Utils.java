@@ -1,6 +1,10 @@
 package to.epac.factorycraft.nexttrainanalyzer;
 
+import android.app.ActivityManager;
+import android.content.Context;
+
 public class Utils {
+
     public static String getStationName(String name) {
         if (name.equals("ADM")) return "金鐘";
         if (name.equals("EXC")) return "會展";
@@ -73,5 +77,15 @@ public class Utils {
         if (name.equals("AWE")) return "博覽館";
 
         return "紅磡";
+    }
+
+    public static boolean isScanning(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (ScanService.class.getName().equals(service.service.getClassName()))
+                return true;
+        }
+
+        return false;
     }
 }

@@ -25,73 +25,76 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+@Deprecated
+public class MainActivity3 extends AppCompatActivity {
+    ImageButton bgrdSearch;
 
-    public static SharedPreferences pref;
-    public static String lineSelected = "EAL";
-
-    protected static ImageButton bgrdSearch;
     protected static ImageButton line;
+    protected static String lineSelected;
+
     protected static TextView lastUpdate;
-    protected static ImageButton refresh;
+    ImageButton refresh;
 
     protected static RadioGroup checkMode;
     protected static RadioButton lineMode;
     protected static RadioButton stationMode;
+
     protected static Switch showRawData;
 
-    protected static LinearLayout destLayout;
-    protected static Spinner selectedDest;
-    protected static LinearLayout stationModeLayout;
-    protected static Spinner selectedStation;
+    LinearLayout destLayout;
+    Spinner selectedDest;
+    Spinner selectedStation;
+    LinearLayout stationModeLayout;
 
     protected static TextView result;
 
-    protected static TextView rawData;
     protected static TextView noData;
+    protected static TextView rawData;
 
     protected static RecyclerView trainDataUp;
     protected static RecyclerView trainDataDn;
     protected static TrainAdapter upAdapter;
     protected static TrainAdapter dnAdapter;
 
+    protected static ArrayList<Train> upTrainData = new ArrayList<>();
+    protected static ArrayList<Train> dnTrainData = new ArrayList<>();
 
-    public static ArrayList<Train> upTrainData = new ArrayList<>();
-    public static ArrayList<Train> dnTrainData = new ArrayList<>();
+    public static SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main3);
 
         pref = getSharedPreferences("NextTrainAnalyzer", MODE_PRIVATE);
 
         bgrdSearch = findViewById(R.id.bgrdSearch);
         line = findViewById(R.id.line);
+
         lastUpdate = findViewById(R.id.lastUpdate);
+
         refresh = findViewById(R.id.refresh);
 
         checkMode = findViewById(R.id.checkMode);
         lineMode = findViewById(R.id.lineMode);
         stationMode = findViewById(R.id.stationMode);
+
         showRawData = findViewById(R.id.showRawData);
 
         destLayout = findViewById(R.id.destLayout);
+
         selectedDest = findViewById(R.id.selectedDest);
-        stationModeLayout = findViewById(R.id.stationModeLayout);
         selectedStation = findViewById(R.id.selectedStation);
+        stationModeLayout = findViewById(R.id.stationModeLayout);
 
         result = findViewById(R.id.result);
 
-        rawData = findViewById(R.id.rawData);
         noData = findViewById(R.id.noData);
+        rawData = findViewById(R.id.rawData);
 
         trainDataUp = findViewById(R.id.trainDataUp);
         trainDataDn = findViewById(R.id.trainDataDn);
-
 
         upAdapter = new TrainAdapter(this, upTrainData);
         trainDataUp.setLayoutManager(new LinearLayoutManager(this));
@@ -101,6 +104,14 @@ public class MainActivity extends AppCompatActivity {
         trainDataDn.setLayoutManager(new LinearLayoutManager(this));
         trainDataDn.setAdapter(dnAdapter);
 
+        lineSelected = pref.getString("line_selected", "TML");
+        selectedDest.setSelection(pref.getInt("selected_dest", 18));
+        selectedStation.setSelection(pref.getInt("selected_station", 25));
+
+        findViewById(R.id.main2).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity3.this, MainActivity.class);
+            startActivity(intent);
+        });
 
         bgrdSearch.setOnClickListener(v -> {
             Intent intent = new Intent(this, ScanService.class);
@@ -113,8 +124,11 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("tagg", "API-26 OREO- startService()");
                     startService(intent);
                 }
-            } else
+            } else {
                 stopService(intent);
+                // NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                // manager.cancel(NotificationProvider.IS_RUNNING_ID);
+            }
 
             if (Utils.isScanning(this))
                 bgrdSearch.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_pause_circle_outline_black_24dp));
@@ -123,43 +137,33 @@ public class MainActivity extends AppCompatActivity {
         });
 
         line.setOnClickListener(view -> {
-            AlertDialog.Builder lineDialog = new AlertDialog.Builder(this);
-
+            AlertDialog.Builder lineDialog = new AlertDialog.Builder(MainActivity3.this);
             lineDialog.setTitle("請選擇綫路")
-                    .setItems(R.array.lines_long, (dialogInterface, i) -> {
-                        // Clear search result to avoid confusion
-                        result.setText("載入中...");
-
-                        // Change the saved line and set the selected station to 0
-                        lineSelected = getResources().getStringArray(R.array.lines)[i];
+                    .setItems(R.array.lines_long, (dialog, which) -> {
+                        lineSelected = getResources().getStringArray(R.array.lines)[which];
+                        pref.edit().putString("line_selected", lineSelected).apply();
 
                         int drawableId = getResources().getIdentifier(lineSelected.toLowerCase() + "_line", "drawable", getPackageName());
                         int colorId = getResources().getIdentifier(lineSelected.toLowerCase(), "color", getPackageName());
                         int arrayId = getResources().getIdentifier(lineSelected.toLowerCase() + "_stations_long", "array", getPackageName());
-                        int array0Id = getResources().getIdentifier(lineSelected.toLowerCase() + "_stations", "array", getPackageName());
 
-                        pref.edit().putString("selected_line", lineSelected)
-                                .putString("selected_dest", getResources().getStringArray(array0Id)[0])
-                                .putString("selected_station", getResources().getStringArray(array0Id)[0]).apply();
-
-                        // Set line image, change layout color, change spinner content
                         line.setImageDrawable(AppCompatResources.getDrawable(this, drawableId));
-                        destLayout.setBackgroundColor(ContextCompat.getColor(this, colorId));
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(arrayId));
+                        destLayout.setBackgroundColor(ContextCompat.getColor(MainActivity3.this, colorId));
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity3.this, android.R.layout.simple_spinner_item, getResources().getStringArray(arrayId));
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         selectedDest.setAdapter(adapter);
                         selectedStation.setAdapter(adapter);
 
-                        // Retrieve the data
-                        DataFetcher process = new DataFetcher(this);
+                        result.setText("載入中...");
+                        DataFetcher process = new DataFetcher(getApplicationContext());
                         process.execute();
-                    }).show();
+                    });
+            lineDialog.show();
         });
 
-        refresh.setOnClickListener(view -> {
+        refresh.setOnClickListener(v -> {
             result.setText("載入中...");
-
-            DataFetcher process = new DataFetcher(MainActivity.this);
+            DataFetcher process = new DataFetcher(MainActivity3.this);
             process.execute();
         });
 
@@ -183,13 +187,11 @@ public class MainActivity extends AppCompatActivity {
                 noData.setVisibility(View.GONE);
             } else {
                 rawData.setVisibility(View.GONE);
+                trainDataUp.setItemViewCacheSize(View.VISIBLE);
+                trainDataDn.setItemViewCacheSize(View.VISIBLE);
 
                 if (upTrainData.isEmpty() && dnTrainData.isEmpty())
                     noData.setVisibility(View.VISIBLE);
-                else {
-                    trainDataUp.setVisibility(View.VISIBLE);
-                    trainDataDn.setVisibility(View.VISIBLE);
-                }
             }
         });
 
@@ -198,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int arrayId = getResources().getIdentifier(lineSelected.toLowerCase() + "_stations", "array", getPackageName());
 
-                pref.edit().putString("selected_dest", getResources().getStringArray(arrayId)[selectedDest.getSelectedItemPosition()]).apply();
+                pref.edit().putString("dest_selected", getResources().getStringArray(arrayId)[selectedDest.getSelectedItemPosition()]).apply();
 
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
             }
@@ -213,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int arrayId = getResources().getIdentifier(lineSelected.toLowerCase() + "_stations", "array", getPackageName());
 
-                pref.edit().putString("selected_station", getResources().getStringArray(arrayId)[selectedStation.getSelectedItemPosition()]).apply();
+                pref.edit().putString("station_selected", getResources().getStringArray(arrayId)[selectedStation.getSelectedItemPosition()]).apply();
 
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
             }
@@ -223,35 +225,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Initial loading
         if (Utils.isScanning(this))
             bgrdSearch.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_pause_circle_outline_black_24dp));
         else
             bgrdSearch.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_play_circle_outline_black_24dp));
 
-        // Get corresponding string from yml
-        int drawableId = getResources().getIdentifier(lineSelected.toLowerCase() + "_line", "drawable", getPackageName());
-        int colorId = getResources().getIdentifier(lineSelected.toLowerCase(), "color", getPackageName());
-        int arrayId = getResources().getIdentifier(lineSelected.toLowerCase() + "_stations_long", "array", getPackageName());
-        int staId = getResources().getIdentifier(lineSelected.toLowerCase() + "_stations", "array", getPackageName());
-        List<String> staName = Arrays.asList(getResources().getStringArray(staId));
-
-        // Set line image, change layout color, change spinner content
-        line.setImageDrawable(AppCompatResources.getDrawable(this, drawableId));
-        destLayout.setBackgroundColor(ContextCompat.getColor(this, colorId));
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(arrayId));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        selectedDest.setAdapter(adapter);
-        selectedDest.setSelection(staName.indexOf(pref.getString("selected_dest", "ADM")));
-        selectedStation.setAdapter(adapter);
-        selectedStation.setSelection(staName.indexOf(pref.getString("selected_station", "ADM")));
-
-        checkMode.check(pref.getBoolean("line_mode", true) ? R.id.lineMode : R.id.stationMode);
-
-        // Show loading text
         result.setText("載入中...");
-
+        // TODO - try ASyncTask to do periodically
         DataFetcher process = new DataFetcher(getApplicationContext());
         process.execute();
     }

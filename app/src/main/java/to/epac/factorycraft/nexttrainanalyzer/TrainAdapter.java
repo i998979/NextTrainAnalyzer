@@ -1,7 +1,8 @@
 package to.epac.factorycraft.nexttrainanalyzer;
 
+import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.pref;
+
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,36 +11,34 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import static to.epac.factorycraft.nexttrainanalyzer.MainActivity.line_selected;
-
 public class TrainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context context;
+    private final Context context;
+    private final ArrayList<Train> trainData;
 
-    private ArrayList<Train> train_datas;
-
-    public TrainAdapter(Context context, ArrayList<Train> train_datas) {
+    public TrainAdapter(Context context, ArrayList<Train> trainData) {
         this.context = context;
-        this.train_datas = train_datas;
+        this.trainData = trainData;
     }
 
+    @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.train_cards, parent, false);
-        RecyclerView.ViewHolder viewHolder = new ViewHolderContent(view);
 
-        return viewHolder;
+        return new ViewHolderContent(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Train train = train_datas.get(position);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Train train = trainData.get(position);
         ViewHolderContent holderContent = (ViewHolderContent) holder;
 
         // Change TrainCard background color
@@ -57,15 +56,15 @@ public class TrainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holderContent.tvStation.setText(Utils.getStationName(train.getStation()));
 
             // Change background color of Station Name according to the line selected
-            int resId = context.getResources().getIdentifier(line_selected.toLowerCase(), "color", context.getPackageName());
-            holderContent.tvStation.setBackgroundColor(ContextCompat.getColor(context, resId));
+            holderContent.tvStation.setBackgroundColor(ContextCompat.getColor(context,
+                    context.getResources().getIdentifier(pref.getString("selected_line", "EAL").toLowerCase(), "color", context.getPackageName())));
         } else {
             holderContent.tvStation.setVisibility(View.GONE);
             holderContent.tvStation.setText("");
         }
 
         // Highlight irregular destination
-        int arrayId = context.getResources().getIdentifier(line_selected.toLowerCase() + "_stations", "array", context.getPackageName());
+        int arrayId = context.getResources().getIdentifier(pref.getString("selected_line", "EAL").toLowerCase() + "_stations", "array", context.getPackageName());
         String[] terminus = context.getResources().getStringArray(arrayId);
 
         holderContent.tvDest.setTextColor(Color.parseColor("#FF0000"));
@@ -79,7 +78,7 @@ public class TrainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         String time = train.getTime().split(" ")[1];
         holderContent.tvTime.setText(time);
 
-        // Dispaly ttnt acording to the station and minutes
+        // Display ttnt according to the station and minutes
         if (train.getTtnt().equals("1")) {
             holderContent.tvTtnt.setText("即將抵達");
             for (String station : terminus) {
@@ -93,14 +92,15 @@ public class TrainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else
             holderContent.tvTtnt.setText(train.getTtnt() + " 分鐘");
 
-        // Dispaly platform no.
+        // Display platform no.
         // Change Platform number according the line selected and the platform
-        int resId = context.getResources().getIdentifier(line_selected.toLowerCase() + "_p" + train.getPlat(), "drawable", context.getPackageName());
+        int resId = context.getResources().getIdentifier(pref.getString("selected_line", "EAL").toLowerCase() + "_p" + train.getPlat(), "drawable", context.getPackageName());
         holderContent.platImg.setImageResource(resId);
     }
+
     @Override
     public int getItemCount() {
-        return train_datas.size();
+        return trainData.size();
     }
 
     public class ViewHolderContent extends RecyclerView.ViewHolder {
@@ -110,41 +110,33 @@ public class TrainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public TextView tvDest;
         public ImageView platImg;
         public TextView tvTtnt;
+        public LinearLayout TrainData;
 
-        public LinearLayout TrainDatas;
+        public ViewHolderContent(View view) {
+            super(view);
 
-        public ViewHolderContent(View itemView) {
-            super(itemView);
-            tvStation = itemView.findViewById(R.id.tvStation);
-            tvSequence = itemView.findViewById(R.id.tvSequence);
-            tvTime = itemView.findViewById(R.id.tvTime);
-            tvDest = itemView.findViewById(R.id.tvDest);
-            platImg = itemView.findViewById(R.id.platImg);
-            tvTtnt = itemView.findViewById(R.id.tvTtnt);
+            tvStation = view.findViewById(R.id.tvStation);
+            tvSequence = view.findViewById(R.id.tvSequence);
+            tvTime = view.findViewById(R.id.tvTime);
+            tvDest = view.findViewById(R.id.tvDest);
+            platImg = view.findViewById(R.id.platImg);
+            tvTtnt = view.findViewById(R.id.tvTtnt);
+            TrainData = view.findViewById(R.id.TrainData);
 
-            TrainDatas = itemView.findViewById(R.id.TrainDatas);
-            TrainDatas.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    AlertDialog.Builder normalDialog = new AlertDialog.Builder(context);
+            TrainData.setOnLongClickListener(v -> {
+                Train train = trainData.get(getBindingAdapterPosition());
 
-                    Train train = train_datas.get(getAdapterPosition());
-                    normalDialog.setMessage(
-                            "方向：" + train.getDir() + "\n" +
-                                    "車站：" + Utils.getStationName(train.getStation()) + "\n" +
-                                    "班次：" + train.getSeq() + "\n" +
-                                    "抵站時間：" + train.getTime() + "\n" +
-                                    "目的地：" + Utils.getStationName(train.getDest()) + "\n" +
-                                    "月台：" + train.getPlat() + "\n" +
-                                    "TTNT：" + train.getTtnt());
-                    normalDialog.setPositiveButton("確定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    normalDialog.show();
-                    return false;
-                }
+                AlertDialog.Builder normalDialog = new AlertDialog.Builder(context);
+                normalDialog.setMessage("方向：" + train.getDir() + "\n" +
+                                "車站：" + Utils.getStationName(train.getStation()) + "\n" +
+                                "班次：" + train.getSeq() + "\n" +
+                                "抵站時間：" + train.getTime() + "\n" +
+                                "目的地：" + Utils.getStationName(train.getDest()) + "\n" +
+                                "月台：" + train.getPlat() + "\n" +
+                                "TTNT：" + train.getTtnt())
+                        .setPositiveButton("確定", (dialog, which) -> {
+                        }).show();
+                return false;
             });
         }
     }

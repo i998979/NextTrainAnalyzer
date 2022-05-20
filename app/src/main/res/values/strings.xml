@@ -4,8 +4,8 @@
     <string-array name="lines_long">
         <item>東鐵綫 East Rail Line</item>
         <item>屯馬綫 Tuen Ma Line</item>
-        <!--<item>屯馬綫 Tuen Ma Line (西鐵綫 West Rail Line)</item>
-        <item>屯馬綫 Tuen Ma Line (馬鞍山綫 Ma On Shan Line)</item>
+        <!--<item>屯馬綫 Tuen Ma Line (西鐵綫 West Rail Line Section)</item>
+        <item>屯馬綫 Tuen Ma Line (馬鞍山綫 Ma On Shan Line Section)</item>
         <item>屯馬綫 Tuen Ma Line (新段 New Section)</item>-->
         <item>東涌綫 Tung Chung Line</item>
         <item>將軍澳綫 Tseung Kwan O Line</item>
@@ -14,6 +14,7 @@
 
     <string-array name="terminus">
         <item>ADM</item>
+        <item>SHS</item>
         <item>LOW</item>
         <item>LMC</item>
         <item>TUM</item>
@@ -28,7 +29,7 @@
 
     <string-array name="lines">
         <item>EAL</item>
-        <item>WRL</item>
+        <item>TML</item>
         <item>TCL</item>
         <item>TKL</item>
         <item>AEL</item>
