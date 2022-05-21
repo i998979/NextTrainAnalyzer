@@ -19,6 +19,8 @@ public class Train {
         this.dest = dest;
         this.plat = plat;
         this.ttnt = ttnt;
+        this.timetype = timetype;
+        this.route = route;
     }
 
     public String getDir() {

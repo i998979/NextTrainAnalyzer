@@ -72,7 +72,13 @@ public class TrainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (train.getStation().equals(station))
                 holderContent.tvDest.setTextColor(Color.parseColor("#000000"));
         }
-        holderContent.tvDest.setText(Utils.getStationName(train.getDest()));
+
+        String dest = Utils.getStationName(train.getDest());
+        if (train.getRoute().equals("RAC"))
+            dest += " 經馬場";
+        holderContent.tvDest.setText(dest);
+        if (dest.length() > 5)
+            holderContent.tvDest.setTextSize(12.0F);
 
         // Show hh:mm:ss
         String time = train.getTime().split(" ")[1];
@@ -133,7 +139,8 @@ public class TrainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 "抵站時間：" + train.getTime() + "\n" +
                                 "目的地：" + Utils.getStationName(train.getDest()) + "\n" +
                                 "月台：" + train.getPlat() + "\n" +
-                                "TTNT：" + train.getTtnt())
+                                "TTNT：" + train.getTtnt() + "\n" +
+                                "路綫：" + train.getRoute())
                         .setPositiveButton("確定", (dialog, which) -> {
                         }).show();
                 return false;
