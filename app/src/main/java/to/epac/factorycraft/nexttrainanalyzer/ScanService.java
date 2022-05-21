@@ -25,15 +25,14 @@ public class ScanService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         handler.postDelayed(fetch_data, 5000);
 
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(getApplicationContext(), String.valueOf(FOREGROUND_ID))
-                        .setSmallIcon(R.drawable.sp1900_wr_nobgrd)
-                        .setContentTitle("Next Train Analyzer")
-                        .setContentText("背景搜尋進行中...")
-                        .setPriority(Notification.PRIORITY_MAX);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, String.valueOf(FOREGROUND_ID))
+                .setSmallIcon(R.drawable.sp1900_wr_nobgrd)
+                .setContentTitle("Next Train Analyzer")
+                .setContentText("背景搜尋進行中...")
+                .setPriority(Notification.PRIORITY_MAX);
 
-        Intent mIntent = new Intent(getApplicationContext(), MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        Intent mIntent = new Intent(this, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         builder.setContentIntent(contentIntent);
 
         Notification notification = builder.build();
@@ -62,7 +61,7 @@ public class ScanService extends Service {
     private Handler handler = new Handler();
     private Runnable fetch_data = new Runnable() {
         public void run() {
-            DataFetcher process = new DataFetcher(getApplicationContext());
+            DataFetcher process = new DataFetcher(ScanService.this);
             process.execute();
 
             handler.postDelayed(this, 10 * 1000);

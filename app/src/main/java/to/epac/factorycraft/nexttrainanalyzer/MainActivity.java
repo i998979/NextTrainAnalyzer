@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
         // Show loading text
         result.setText("載入中...");
 
-        DataFetcher process = new DataFetcher(getApplicationContext());
+        DataFetcher process = new DataFetcher(this);
         process.execute();
     }
 }
