@@ -17,12 +17,19 @@
         <item>SHS</item>
         <item>LOW</item>
         <item>LMC</item>
+
         <item>TUM</item>
+        <item>TAW</item>
+        <item>WKS</item>
+
         <item>HOK</item>
         <item>TUC</item>
+
         <item>NOP</item>
         <item>POA</item>
         <item>LHP</item>
+        <item>TIK</item>
+
         <item>HOK</item>
         <item>AWE</item>
     </string-array>
