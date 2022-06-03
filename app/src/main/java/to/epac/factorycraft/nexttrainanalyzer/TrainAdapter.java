@@ -64,12 +64,11 @@ public class TrainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         // Highlight irregular destination
-        int arrayId = context.getResources().getIdentifier(pref.getString("selected_line", "EAL").toLowerCase() + "_stations", "array", context.getPackageName());
-        String[] terminus = context.getResources().getStringArray(arrayId);
+        String[] terminus = context.getResources().getStringArray(R.array.terminus);
 
         holderContent.tvDest.setTextColor(Color.parseColor("#FF0000"));
         for (String station : terminus) {
-            if (train.getStation().equals(station))
+            if (train.getDest().equals(station))
                 holderContent.tvDest.setTextColor(Color.parseColor("#000000"));
         }
 
