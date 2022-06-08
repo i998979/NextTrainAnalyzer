@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.IntentSender;
-import android.util.Log;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -145,7 +144,7 @@ public class Utils {
         return false;
     }
 
-    public static void loadLocation(Context context) {
+    public static void loadStationCoordinates(Context context) {
         MainActivity.stations.clear();
 
         try {
@@ -153,7 +152,6 @@ public class Utils {
             String data = "";
             String line;
             while ((line = br.readLine()) != null) {
-                Log.e("code", line);
                 data += line;
             }
 
@@ -166,10 +164,10 @@ public class Utils {
                 String name = jsonObject1.getString("nameEN");
                 String coordinate = jsonObject1.getString("coordinate");
 
-                double lon = Double.parseDouble(coordinate.split(",")[0]);
+                double lng = Double.parseDouble(coordinate.split(",")[0]);
                 double lat = Double.parseDouble(coordinate.split(",")[1]);
 
-                Station station = new Station(name, id, lon, lat);
+                Station station = new Station(name, id, lng, lat);
                 MainActivity.stations.add(station);
             }
 
@@ -179,8 +177,15 @@ public class Utils {
         }
     }
 
+    /**
+     * https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+     * 
+     * Prompt and ask user to enable location
+     *
+     * @param activity Activity to run this
+     */
     public static void enableLocation(Activity activity) {
-        LocationRequest mLocationRequest = new LocationRequest();
+        LocationRequest mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(10);
         mLocationRequest.setSmallestDisplacement(10);
         mLocationRequest.setFastestInterval(10);
@@ -194,17 +199,28 @@ public class Utils {
             public void onComplete(Task<LocationSettingsResponse> task) {
                 try {
                     LocationSettingsResponse response = task.getResult(ApiException.class);
+                    // All location settings are satisfied. The client can initialize location
+                    // requests here.
                 } catch (ApiException exception) {
                     switch (exception.getStatusCode()) {
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied. But could be fixed by showing the
+                            // user a dialog.
                             try {
+                                // Cast to a resolvable exception.
                                 ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
                                 resolvable.startResolutionForResult(activity, 1002);
                             } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
                             } catch (ClassCastException e) {
+                                // Ignore, should be an impossible error.
                             }
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            // Location settings are not satisfied. However, we have no way to fix the
+                            // settings so we won't show the dialog.
                             break;
                     }
                 }

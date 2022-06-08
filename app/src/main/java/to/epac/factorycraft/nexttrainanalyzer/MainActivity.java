@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         trainDataDn.setAdapter(dnAdapter);
 
 
-        Utils.loadLocation(this);
+        Utils.loadStationCoordinates(this);
 
         bgrdSearch.setOnClickListener(v -> {
             Intent intent = new Intent(this, ScanService.class);
@@ -177,23 +177,20 @@ public class MainActivity extends AppCompatActivity {
                     requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1002);
                 }
             } else {
-
                 Utils.enableLocation(this);
 
                 FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-
-                LocationRequest mLocationRequest = LocationRequest.create();
-                mLocationRequest.setInterval(60000);
-                mLocationRequest.setFastestInterval(5000);
-                mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                LocationCallback mLocationCallback = new LocationCallback() {
+                LocationRequest locationRequest = LocationRequest.create();
+                locationRequest.setInterval(60000);
+                locationRequest.setFastestInterval(5000);
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                LocationCallback locationCallback = new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                     }
                 };
-                fusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.getMainLooper());
-
+                fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
 
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(this, location -> {
