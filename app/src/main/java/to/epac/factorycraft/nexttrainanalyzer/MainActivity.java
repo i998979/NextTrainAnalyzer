@@ -1,10 +1,14 @@
 package to.epac.factorycraft.nexttrainanalyzer;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,9 +24,16 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     protected static RadioGroup checkMode;
     protected static RadioButton lineMode;
     protected static RadioButton stationMode;
+    protected static ImageButton locate;
     protected static Switch showRawData;
 
     protected static LinearLayout destLayout;
@@ -61,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<Train> upTrainData = new ArrayList<>();
     public static ArrayList<Train> dnTrainData = new ArrayList<>();
+    public static ArrayList<Station> stations = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         pref = getSharedPreferences("NextTrainAnalyzer", MODE_PRIVATE);
+        lineSelected = pref.getString("selected_line", "EAL");
 
         bgrdSearch = findViewById(R.id.bgrdSearch);
         line = findViewById(R.id.line);
@@ -77,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         checkMode = findViewById(R.id.checkMode);
         lineMode = findViewById(R.id.lineMode);
         stationMode = findViewById(R.id.stationMode);
+        locate = findViewById(R.id.locate);
         showRawData = findViewById(R.id.showRawData);
 
         destLayout = findViewById(R.id.destLayout);
@@ -102,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
         trainDataDn.setAdapter(dnAdapter);
 
 
+        Utils.loadLocation(this);
+
         bgrdSearch.setOnClickListener(v -> {
             Intent intent = new Intent(this, ScanService.class);
 
@@ -124,33 +141,12 @@ public class MainActivity extends AppCompatActivity {
 
         line.setOnClickListener(view -> {
             AlertDialog.Builder lineDialog = new AlertDialog.Builder(this);
-
             lineDialog.setTitle("請選擇綫路")
                     .setItems(R.array.lines_long, (dialogInterface, i) -> {
-                        // Clear search result to avoid confusion
                         result.setText("載入中...");
 
-                        // Change the saved line and set the selected station to 0
-                        lineSelected = getResources().getStringArray(R.array.lines)[i];
+                        setSelectedLine(i);
 
-                        int drawableId = getResources().getIdentifier(lineSelected.toLowerCase() + "_line", "drawable", getPackageName());
-                        int colorId = getResources().getIdentifier(lineSelected.toLowerCase(), "color", getPackageName());
-                        int arrayId = getResources().getIdentifier(lineSelected.toLowerCase() + "_stations_long", "array", getPackageName());
-                        int array0Id = getResources().getIdentifier(lineSelected.toLowerCase() + "_stations", "array", getPackageName());
-
-                        pref.edit().putString("selected_line", lineSelected)
-                                .putString("selected_dest", getResources().getStringArray(array0Id)[0])
-                                .putString("selected_station", getResources().getStringArray(array0Id)[0]).apply();
-
-                        // Set line image, change layout color, change spinner content
-                        line.setImageDrawable(AppCompatResources.getDrawable(this, drawableId));
-                        destLayout.setBackgroundColor(ContextCompat.getColor(this, colorId));
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(arrayId));
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        selectedDest.setAdapter(adapter);
-                        selectedStation.setAdapter(adapter);
-
-                        // Retrieve the data
                         DataFetcher process = new DataFetcher(this);
                         process.execute();
                     }).show();
@@ -171,6 +167,69 @@ public class MainActivity extends AppCompatActivity {
             if (checkedId == R.id.stationMode) {
                 stationModeLayout.setVisibility(View.VISIBLE);
                 pref.edit().putBoolean("line_mode", false).apply();
+            }
+        });
+
+        locate.setOnClickListener(v -> {
+            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1002);
+                }
+            } else {
+
+                Utils.enableLocation(this);
+
+                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
+                LocationRequest mLocationRequest = LocationRequest.create();
+                mLocationRequest.setInterval(60000);
+                mLocationRequest.setFastestInterval(5000);
+                mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                LocationCallback mLocationCallback = new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                    }
+                };
+                fusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.getMainLooper());
+
+
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(this, location -> {
+                            Log.d("tagg", "Location: " + location);
+                            if (location != null) {
+                                // Initialize station variables by assigning the first station from the list
+                                Station closest = stations.get(0);
+
+                                // Calculate distances
+                                for (Station sta : stations) {
+                                    Location staLoc = new Location(sta.getId());
+                                    staLoc.setLongitude(sta.getLongitude());
+                                    staLoc.setLatitude(sta.getLatitude());
+
+                                    // If the distance between current location and the station location < old one, update old one to new one
+                                    if (staLoc.distanceTo(location) < location.distanceTo(staLoc))
+                                        closest = sta;
+                                }
+
+                                // Get the line id
+                                String lne = Utils.getStationInLine(MainActivity.this, closest.getId());
+                                int i = Utils.getArrayIdFromString(MainActivity.this, "lines", lne);
+
+                                // Update the selected line
+                                result.setText("載入中...");
+                                setSelectedLine(i);
+
+                                // Update selected station to the closest one
+                                selectedStation.setSelection(Utils.getArrayIdFromString(MainActivity.this, lne + "_stations", closest.getId()));
+                                pref.edit().putString("selected_station", closest.getId()).apply();
+
+                                // Retrieve data
+                                DataFetcher process = new DataFetcher(MainActivity.this);
+                                process.execute();
+                            }
+                        });
             }
         });
 
@@ -254,5 +313,27 @@ public class MainActivity extends AppCompatActivity {
 
         DataFetcher process = new DataFetcher(this);
         process.execute();
+    }
+
+    private void setSelectedLine(int i) {
+        // Change the saved line and set the selected station to 0
+        lineSelected = getResources().getStringArray(R.array.lines)[i];
+
+        int drawableId = getResources().getIdentifier(lineSelected.toLowerCase() + "_line", "drawable", getPackageName());
+        int colorId = getResources().getIdentifier(lineSelected.toLowerCase(), "color", getPackageName());
+        int arrayId = getResources().getIdentifier(lineSelected.toLowerCase() + "_stations_long", "array", getPackageName());
+        int array0Id = getResources().getIdentifier(lineSelected.toLowerCase() + "_stations", "array", getPackageName());
+
+        pref.edit().putString("selected_line", lineSelected)
+                .putString("selected_dest", getResources().getStringArray(array0Id)[0])
+                .putString("selected_station", getResources().getStringArray(array0Id)[0]).apply();
+
+        // Set line image, change layout color, change spinner content
+        line.setImageDrawable(AppCompatResources.getDrawable(this, drawableId));
+        destLayout.setBackgroundColor(ContextCompat.getColor(this, colorId));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(arrayId));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectedDest.setAdapter(adapter);
+        selectedStation.setAdapter(adapter);
     }
 }
