@@ -4,14 +4,14 @@ public class Station {
 
     private String name;
     private String id;
-    private double longitude;
     private double latitude;
+    private double longitude;
 
-    public Station(String name, String id, double longitude, double latitude) {
+    public Station(String name, String id, double latitude, double longitude) {
         this.name = name;
         this.id = id;
-        this.longitude = longitude;
         this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getName() {
@@ -30,19 +30,19 @@ public class Station {
         this.id = id;
     }
 
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
     public double getLatitude() {
         return latitude;
     }
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }
