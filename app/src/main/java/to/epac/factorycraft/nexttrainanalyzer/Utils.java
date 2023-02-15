@@ -102,6 +102,12 @@ public class Utils {
         if (id.equals("AIR")) return "機場";
         if (id.equals("AWE")) return "博覽館";
 
+        if (id.equals("ADM")) return "金鐘";
+        if (id.equals("OCP")) return "海洋公園";
+        if (id.equals("WCH")) return "黃竹坑";
+        if (id.equals("LET")) return "利東";
+        if (id.equals("SOH")) return "海怡半島";
+
         return "紅磡";
     }
 
@@ -244,7 +250,7 @@ public class Utils {
     }
 
     /**
-     * https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+     * <a href="https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient">...</a>
      * <p>
      * Prompt and ask user to enable location
      *

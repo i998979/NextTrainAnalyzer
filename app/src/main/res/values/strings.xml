@@ -10,9 +10,13 @@
         <item>東涌綫 Tung Chung Line</item>
         <item>將軍澳綫 Tseung Kwan O Line</item>
         <item>機場快綫 Airport Express Line</item>
+        <item>南港島綫 South Island Line</item>
     </string-array>
 
     <string-array name="terminus">
+        <item>ADM</item>
+        <item>SOH</item>
+
         <item>ADM</item>
         <item>SHS</item>
         <item>LOW</item>
@@ -40,6 +44,7 @@
         <item>TCL</item>
         <item>TKL</item>
         <item>AEL</item>
+        <item>SIL</item>
     </string-array>
 
     <string-array name="eal_stations">
@@ -200,4 +205,19 @@
         <item>博覽館</item>
     </string-array>
 
+    <string-array name="sil_stations">
+        <item>ADM</item>
+        <item>OCP</item>
+        <item>WCH</item>
+        <item>LET</item>
+        <item>SOH</item>
+    </string-array>
+
+    <string-array name="sil_stations_long">
+        <item>金鐘</item>
+        <item>海洋公園</item>
+        <item>黃竹坑</item>
+        <item>利東</item>
+        <item>海怡半島</item>
+    </string-array>
 </resources>
