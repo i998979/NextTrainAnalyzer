@@ -108,6 +108,62 @@ public class Utils {
         if (id.equals("LET")) return "利東";
         if (id.equals("SOH")) return "海怡半島";
 
+        if (id.equals("TIK")) return "調景嶺";
+        if (id.equals("YAT")) return "油塘";
+        if (id.equals("LAT")) return "藍田";
+        if (id.equals("KWT")) return "觀塘";
+        if (id.equals("NTK")) return "牛頭角";
+        if (id.equals("KOB")) return "九龍灣";
+        if (id.equals("CHH")) return "彩虹";
+        if (id.equals("DIH")) return "鑽石山";
+        if (id.equals("WTS")) return "黃大仙";
+        if (id.equals("LOF")) return "樂富";
+        if (id.equals("KOT")) return "九龍塘";
+        if (id.equals("SKM")) return "石硤尾";
+        if (id.equals("PRE")) return "太子";
+        if (id.equals("MOK")) return "旺角";
+        if (id.equals("YMT")) return "油麻地";
+        if (id.equals("HOM")) return "何文田";
+        if (id.equals("WHA")) return "黃埔";
+
+        if (id.equals("TSW")) return "荃灣";
+        if (id.equals("TWH")) return "大窩口";
+        if (id.equals("KWH")) return "葵興";
+        if (id.equals("KEF")) return "葵芳";
+        if (id.equals("LAK")) return "荔景";
+        if (id.equals("MEF")) return "美孚";
+        if (id.equals("LCK")) return "荔枝角";
+        if (id.equals("CSW")) return "長沙灣";
+        if (id.equals("SSP")) return "深水埗";
+        if (id.equals("PRE")) return "太子";
+        if (id.equals("MOK")) return "旺角";
+        if (id.equals("YMT")) return "油麻地";
+        if (id.equals("JOR")) return "佐敦";
+        if (id.equals("TST")) return "尖沙咀";
+        if (id.equals("ADM")) return "金鐘";
+        if (id.equals("CEN")) return "中環";
+
+        if (id.equals("KET")) return "堅尼地城";
+        if (id.equals("HKU")) return "香港大學";
+        if (id.equals("SYP")) return "西營盤";
+        if (id.equals("SHW")) return "上環";
+        if (id.equals("CEN")) return "中環";
+        if (id.equals("ADM")) return "金鐘";
+        if (id.equals("WAC")) return "灣仔";
+        if (id.equals("CAB")) return "銅鑼灣";
+        if (id.equals("TIH")) return "天后";
+        if (id.equals("FOH")) return "炮台山";
+        if (id.equals("NOP")) return "北角";
+        if (id.equals("QUB")) return "鰂魚涌";
+        if (id.equals("TAK")) return "太古";
+        if (id.equals("SWH")) return "西灣河";
+        if (id.equals("SKW")) return "筲箕灣";
+        if (id.equals("HFC")) return "杏花邨";
+        if (id.equals("CHW")) return "柴灣";
+
+        if (id.equals("SUN")) return "欣澳";
+        if (id.equals("DIS")) return "迪士尼";
+
         return "紅磡";
     }
 

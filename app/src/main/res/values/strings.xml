@@ -11,20 +11,21 @@
         <item>將軍澳綫 Tseung Kwan O Line</item>
         <item>機場快綫 Airport Express Line</item>
         <item>南港島綫 South Island Line</item>
+        <item>荃灣綫 Tsuen Wan Line</item>
+        <item>港島綫 Island Line</item>
+        <item>觀塘綫 Kwun Tong Line</item>
+        <item>迪士尼綫 Disney Resort Line</item>
     </string-array>
 
     <string-array name="terminus">
-        <item>ADM</item>
-        <item>SOH</item>
-
         <item>ADM</item>
         <item>SHS</item>
         <item>LOW</item>
         <item>LMC</item>
 
-        <item>TUM</item>
-        <item>TAW</item>
         <item>WKS</item>
+        <item>TAW</item>
+        <item>TUM</item>
 
         <item>HOK</item>
         <item>TUC</item>
@@ -36,6 +37,23 @@
 
         <item>HOK</item>
         <item>AWE</item>
+
+        <item>ADM</item>
+        <item>SOH</item>
+
+        <item>CEN</item>
+        <item>TSW</item>
+
+        <item>KET</item>
+        <item>CHW</item>
+
+        <item>WHA</item>
+        <item>HOM</item>
+        <item>KWT</item>
+        <item>TIK</item>
+
+        <item>SUN</item>
+        <item>DIS</item>
     </string-array>
 
     <string-array name="lines">
@@ -45,6 +63,10 @@
         <item>TKL</item>
         <item>AEL</item>
         <item>SIL</item>
+        <item>TWL</item>
+        <item>ISL</item>
+        <item>KTL</item>
+        <item>DRL</item>
     </string-array>
 
     <string-array name="eal_stations">
@@ -219,5 +241,133 @@
         <item>黃竹坑</item>
         <item>利東</item>
         <item>海怡半島</item>
+    </string-array>
+
+    <string-array name="twl_stations">
+        <item>CEN</item>
+        <item>ADM</item>
+        <item>TST</item>
+        <item>JOR</item>
+        <item>YMT</item>
+        <item>MOK</item>
+        <item>PRE</item>
+        <item>SSP</item>
+        <item>CSW</item>
+        <item>LCK</item>
+        <item>MEF</item>
+        <item>LAK</item>
+        <item>KEF</item>
+        <item>KWH</item>
+        <item>TWH</item>
+        <item>TSW</item>
+    </string-array>
+
+    <string-array name="twl_stations_long">
+        <item>中環</item>
+        <item>金鐘</item>
+        <item>尖沙咀</item>
+        <item>佐敦</item>
+        <item>油麻地</item>
+        <item>旺角</item>
+        <item>太子</item>
+        <item>深水埗</item>
+        <item>長沙灣</item>
+        <item>荔枝角</item>
+        <item>美孚</item>
+        <item>荔景</item>
+        <item>葵芳</item>
+        <item>葵興</item>
+        <item>大窩口</item>
+        <item>荃灣</item>
+    </string-array>
+
+    <string-array name="isl_stations">
+        <item>KET</item>
+        <item>HKU</item>
+        <item>SYP</item>
+        <item>SHW</item>
+        <item>CEN</item>
+        <item>ADM</item>
+        <item>WAC</item>
+        <item>CAB</item>
+        <item>TIH</item>
+        <item>FOH</item>
+        <item>NOP</item>
+        <item>QUB</item>
+        <item>TAK</item>
+        <item>SWH</item>
+        <item>SKW</item>
+        <item>HFC</item>
+        <item>CHW</item>
+    </string-array>
+
+    <string-array name="isl_stations_long">
+        <item>堅尼地城</item>
+        <item>香港大學</item>
+        <item>西營盤</item>
+        <item>上環</item>
+        <item>中環</item>
+        <item>金鐘</item>
+        <item>灣仔</item>
+        <item>銅鑼灣</item>
+        <item>天后</item>
+        <item>炮台山</item>
+        <item>北角</item>
+        <item>鰂魚涌</item>
+        <item>太古</item>
+        <item>西灣河</item>
+        <item>筲箕灣</item>
+        <item>杏花邨</item>
+        <item>柴灣</item>
+    </string-array>
+
+    <string-array name="ktl_stations">
+        <item>WHA</item>
+        <item>HOM</item>
+        <item>YMT</item>
+        <item>MOK</item>
+        <item>PRE</item>
+        <item>SKM</item>
+        <item>KOT</item>
+        <item>LOF</item>
+        <item>WTS</item>
+        <item>DIH</item>
+        <item>CHH</item>
+        <item>KOB</item>
+        <item>NTK</item>
+        <item>KWT</item>
+        <item>LAT</item>
+        <item>YAT</item>
+        <item>TIK</item>
+    </string-array>
+
+    <string-array name="ktl_stations_long">
+        <item>黃埔</item>
+        <item>何文田</item>
+        <item>油麻地</item>
+        <item>旺角</item>
+        <item>太子</item>
+        <item>石硤尾</item>
+        <item>九龍塘</item>
+        <item>樂富</item>
+        <item>黃大仙</item>
+        <item>鑽石山</item>
+        <item>彩虹</item>
+        <item>九龍灣</item>
+        <item>牛頭角</item>
+        <item>觀塘</item>
+        <item>藍田</item>
+        <item>油塘</item>
+        <item>調景嶺</item>
+    </string-array>
+
+    <string-array name="drl_stations">
+        <item>SUN</item>
+        <item>DIS</item>
+    </string-array>
+
+    <string-array name="drl_stations_long">
+        <item>欣澳</item>
+        <item>迪士尼</item>
     </string-array>
 </resources>
