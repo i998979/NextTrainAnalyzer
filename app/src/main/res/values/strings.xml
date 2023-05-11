@@ -108,7 +108,9 @@
     </string-array>
 
     <string-array name="tml_stations">
-        <item>WKS</item>
+        <item>W
+            
+            S</item>
         <item>MOS</item>
         <item>HEO</item>
         <item>TSH</item>
@@ -256,7 +258,7 @@
         <item>LCK</item>
         <item>MEF</item>
         <item>LAK</item>
-        <item>KEF</item>
+        <item>KWF</item>
         <item>KWH</item>
         <item>TWH</item>
         <item>TSW</item>
