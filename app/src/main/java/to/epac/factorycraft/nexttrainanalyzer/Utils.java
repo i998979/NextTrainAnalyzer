@@ -129,7 +129,7 @@ public class Utils {
         if (id.equals("TSW")) return "荃灣";
         if (id.equals("TWH")) return "大窩口";
         if (id.equals("KWH")) return "葵興";
-        if (id.equals("KEF")) return "葵芳";
+        if (id.equals("KWF")) return "葵芳";
         if (id.equals("LAK")) return "荔景";
         if (id.equals("MEF")) return "美孚";
         if (id.equals("LCK")) return "荔枝角";
@@ -164,7 +164,7 @@ public class Utils {
         if (id.equals("SUN")) return "欣澳";
         if (id.equals("DIS")) return "迪士尼";
 
-        return "紅磡";
+        return "---";
     }
 
     /**
